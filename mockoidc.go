@@ -54,11 +54,11 @@ type Config struct {
 // rsa.PrivateKey can be passed for token signing operations in case
 // the default Keypair isn't desired.
 func NewServer(key *rsa.PrivateKey) (*MockOIDC, error) {
-	clientID, err := randomNonce(24)
+	clientID, err := "test", error(nil)
 	if err != nil {
 		return nil, err
 	}
-	clientSecret, err := randomNonce(24)
+	clientSecret, err := "secret", error(nil)
 	if err != nil {
 		return nil, err
 	}

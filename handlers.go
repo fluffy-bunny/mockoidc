@@ -36,6 +36,7 @@ var (
 	GrantTypesSupported = []string{
 		"authorization_code",
 		"refresh_token",
+		"client_credentials",
 	}
 	ResponseTypesSupported = []string{
 		"code",
@@ -154,6 +155,29 @@ func (m *MockOIDC) Token(rw http.ResponseWriter, req *http.Request) {
 	)
 	grantType := req.Form.Get("grant_type")
 	switch grantType {
+	case "client_credentials":
+		now := time.Now()
+		claims := standardRootClaims(m.Config(), time.Minute*30, now)
+		claims.Subject = "PorkyPig"
+		accessToken, err := MakeAccessToken(claims, m.Keypair, now)
+		if err != nil {
+			internalServerError(rw, err.Error())
+			return
+		}
+		tr := &tokenResponse{
+			AccessToken: accessToken,
+			TokenType:   "bearer",
+			ExpiresIn:   m.AccessTTL,
+		}
+		resp, err := json.Marshal(tr)
+		if err != nil {
+			internalServerError(rw, err.Error())
+			return
+		}
+		noCache(rw)
+		jsonResponse(rw, resp)
+		return
+
 	case "authorization_code":
 		if session, valid = m.validateCodeGrant(rw, req); !valid {
 			return
