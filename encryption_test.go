@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/fluffy-bunny/mockoidc"
+	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"
 )
 

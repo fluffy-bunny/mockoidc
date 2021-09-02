@@ -3,7 +3,7 @@ package mockoidc
 import (
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 )
 
 func standardRootClaims(config *Config, ttl time.Duration, now time.Time) *jwt.StandardClaims {
